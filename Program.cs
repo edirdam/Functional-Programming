@@ -7,26 +7,29 @@ using System.Threading.Tasks;
 namespace FunctionalProgramming
 {
     class Program
-    {
-        delegate void SayGreeting(string name);
-
-        public static void SayGoodbye(string name)
-        {
-            Console.WriteLine(string.Format("Goodbye, {0}", name));
-        }
-
+    { 
         static void Main(string[] args)
         {
-            SayGreeting sayGreeting = delegate(string name)
+            Action<string> sayGreeting;
+            Func<string, string> conversate = delegate (string message)
             {
-                Console.WriteLine(string.Format("Hello, {0}", name));
+                Console.WriteLine(message);
+                return Console.ReadLine();
             };
-            Console.WriteLine("What's your name?");
-            string input = Console.ReadLine();
-            sayGreeting(input);
-            Console.ReadLine();
-            sayGreeting = new SayGreeting(SayGoodbye);
-            sayGreeting(input);
+
+            string input = conversate("What's your name?");
+
+            sayGreeting = delegate(string greeting)
+            {
+                Console.WriteLine(string.Format(greeting, input));
+            };
+
+
+            sayGreeting("Hello, {0}");
+            conversate("Nice to see you!");
+            conversate("Are you doing well?");
+            sayGreeting("Bye, {0}");
+
 
         }
     }
